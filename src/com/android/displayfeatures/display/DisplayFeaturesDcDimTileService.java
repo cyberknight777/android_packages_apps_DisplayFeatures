@@ -18,6 +18,7 @@ package com.android.displayfeatures.display;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Icon;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
@@ -36,6 +37,7 @@ public class DisplayFeaturesDcDimTileService extends TileService {
 
     private void updateUI(boolean enabled) {
         final Tile tile = getQsTile();
+        tile.setIcon(Icon.createWithResource(this, enabled ? R.drawable.ic_dc_dimming_on : R.drawable.ic_dc_dimming_off));
         tile.setState(enabled ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
         tile.updateTile();
     }
