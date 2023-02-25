@@ -1,0 +1,38 @@
+#+TITLE: DisplayFeatures
+
+* Table of contents
+:PROPERTIES:
+:TOC:
+:END:
+:CONTENTS:
+- [[#about][About]]
+- [[#usage][Usage]]
+- [[#purpose][Purpose]]
+- [[#credits][Credits]]
+:END:
+
+* About
+
+ROM Frontend for display features such as HBM and DC Dimming.
+
+* Usage
+
+** 1) Clone this repository to the specified directory
+
+#+BEGIN_SRC shell
+git clone https://github.com/cyberknight777/android_packages_apps_DisplayFeatures packages/apps/DisplayFeatures
+#+END_SRC
+
+** 2) Adapt the following change in your device tree and build it as it is :)
+
+https://github.com/YAAP/device_xiaomi_sunny/commit/foo
+
+* Purpose
+
++ To provide simple toggles for display features.
+
+#+END_SRC
+* Credits
+
++ [[https://t.me/cyberknight777][cyberknight777]] for developing this package.
++ [[https://t.me/CannedShroud][CannedShroud]] for helping with this package.
