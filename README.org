@@ -23,9 +23,9 @@ ROM Frontend for display features such as HBM and DC Dimming.
 git clone https://github.com/cyberknight777/android_packages_apps_DisplayFeatures packages/apps/DisplayFeatures
 #+END_SRC
 
-** 2) Adapt the following change in your device tree and build it as it is :)
+** 2) Adapt the following commit for your device and build it as it is :)
 
-https://github.com/YAAP/device_xiaomi_sunny/commit/foo
+https://github.com/YAAP/device_xiaomi_sunny/commit/07e0b8cd0946fd619effc094b6d7026f5bbc8e2e
 
 * Purpose
 
@@ -36,3 +36,8 @@ https://github.com/YAAP/device_xiaomi_sunny/commit/foo
 
 + [[https://t.me/cyberknight777][cyberknight777]] for developing this package.
 + [[https://t.me/CannedShroud][CannedShroud]] for helping with this package.
++ [[https://t.me/SakthivelNadar][Sakthivel Nadar]] for helping with this package.
++ [[https://t.me/Waxaranai][Waxaranai]] for helping with this package.
++ [[https://t.me/Idoybh2][Ido Ben-Hur]] for helping with this package.
++ [[https://t.me/CoolDude6942][CoolDude]] for helping with this package.
++ To whoever I imported/adapted from.
