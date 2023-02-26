@@ -18,6 +18,7 @@
 package com.android.displayfeatures.display;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.preference.Preference;
@@ -42,8 +43,9 @@ public class DisplayFeaturesFragment extends PreferenceFragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        DISPLAYFEATURES_DC_DIMMING_NODE = context.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
-        DISPLAYFEATURES_HBM_NODE = context.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+        Resources res = context.getResources();
+        DISPLAYFEATURES_DC_DIMMING_NODE = res.getString(R.string.config_DisplayFeaturesDcDimPath);
+        DISPLAYFEATURES_HBM_NODE = res.getString(R.string.config_DisplayFeaturesHbmPath);
     }
 
     @Override
