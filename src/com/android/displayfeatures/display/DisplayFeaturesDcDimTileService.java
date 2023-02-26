@@ -29,11 +29,9 @@ import com.android.displayfeatures.utils.FileUtils;
 
 public class DisplayFeaturesDcDimTileService extends TileService {
 
-    private static final Context mContext;
-    private SharedPreferences mSharedPrefs;
-
+    private Context mContext;
     private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
-    private static final String DISPLAYFEATURES_DC_DIMMING_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+    private String DISPLAYFEATURES_DC_DIMMING_NODE;
 
     private void updateUI(boolean enabled) {
         final Tile tile = getQsTile();
@@ -57,8 +55,12 @@ public class DisplayFeaturesDcDimTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
+
+        mContext = this;
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        DISPLAYFEATURES_DC_DIMMING_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
         final boolean enabled = !(sharedPrefs.getBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, false));
+
         FileUtils.writeLine(DISPLAYFEATURES_DC_DIMMING_NODE, enabled ? "1" : "0");
         sharedPrefs.edit().putBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
         updateUI(enabled);

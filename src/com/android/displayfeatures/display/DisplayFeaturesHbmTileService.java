@@ -28,11 +28,9 @@ import com.android.displayfeatures.utils.FileUtils;
 
 public class DisplayFeaturesHbmTileService extends TileService {
 
-    private static final Context mContext;
-    private SharedPreferences mSharedPrefs;
-
+    private Context mContext;
     private static final String DISPLAYFEATURES_HBM_KEY = "hbm";
-    private static final String DISPLAYFEATURES_HBM_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+    private String DISPLAYFEATURES_HBM_NODE;
 
     private void updateUI(boolean enabled) {
         final Tile tile = getQsTile();
@@ -55,8 +53,12 @@ public class DisplayFeaturesHbmTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
+
+        mContext = this;
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        DISPLAYFEATURES_HBM_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
         final boolean enabled = !(sharedPrefs.getBoolean(DISPLAYFEATURES_HBM_KEY, false));
+
         FileUtils.writeLine(DISPLAYFEATURES_HBM_NODE, enabled ? "1" : "0");
         sharedPrefs.edit().putBoolean(DISPLAYFEATURES_HBM_KEY, enabled).commit();
         updateUI(enabled);

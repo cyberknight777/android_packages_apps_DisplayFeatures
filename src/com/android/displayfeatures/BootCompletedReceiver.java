@@ -27,19 +27,22 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
-    private static final Context mContext;
     private static final boolean DEBUG = false;
     private static final String TAG = "DisplayFeatures";
+
     private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
-    private static final String DISPLAYFEATURES_DC_DIMMING_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+    private String DISPLAYFEATURES_DC_DIMMING_NODE;
+
     private static final String DISPLAYFEATURES_HBM_KEY = "hbm";
-    private static final String DISPLAYFEATURES_HBM_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+    private String DISPLAYFEATURES_HBM_NODE;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         if (DEBUG)
             Log.d(TAG, "Received boot completed intent");
 
+        DISPLAYFEATURES_DC_DIMMING_NODE = context.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+        DISPLAYFEATURES_HBM_NODE = context.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean dcDimmingEnabled = sharedPrefs.getBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, false);

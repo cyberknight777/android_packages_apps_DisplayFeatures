@@ -31,14 +31,20 @@ import com.android.displayfeatures.utils.FileUtils;
 public class DisplayFeaturesFragment extends PreferenceFragment implements
         OnPreferenceChangeListener {
 
-    private static final Context mContext;
     private SwitchPreference mDcDimmingPreference;
     private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
-    private static final String DISPLAYFEATURES_DC_DIMMING_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+    private String DISPLAYFEATURES_DC_DIMMING_NODE;
 
     private SwitchPreference mHBMPreference;
     private static final String DISPLAYFEATURES_HBM_KEY = "hbm";
-    private static final String DISPLAYFEATURES_HBM_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+    private String DISPLAYFEATURES_HBM_NODE;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        DISPLAYFEATURES_DC_DIMMING_NODE = context.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+        DISPLAYFEATURES_HBM_NODE = context.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
