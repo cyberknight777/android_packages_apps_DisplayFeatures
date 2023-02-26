@@ -16,6 +16,7 @@
 
 package com.android.displayfeatures.display;
 
+import android.content.res.Resources;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.service.quicksettings.Tile;
@@ -55,8 +56,9 @@ public class DisplayFeaturesHbmTileService extends TileService {
         super.onClick();
 
         mContext = this;
+        Resources res = mContext.getResources();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        DISPLAYFEATURES_HBM_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+        DISPLAYFEATURES_HBM_NODE = res.getString(R.string.config_DisplayFeaturesHbmPath);
         final boolean enabled = !(sharedPrefs.getBoolean(DISPLAYFEATURES_HBM_KEY, false));
 
         FileUtils.writeLine(DISPLAYFEATURES_HBM_NODE, enabled ? "1" : "0");

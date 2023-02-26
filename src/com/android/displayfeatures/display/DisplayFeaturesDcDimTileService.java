@@ -16,6 +16,7 @@
 
 package com.android.displayfeatures.display;
 
+import android.content.res.Resources;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Icon;
@@ -57,8 +58,9 @@ public class DisplayFeaturesDcDimTileService extends TileService {
         super.onClick();
 
         mContext = this;
+        Resources res = mContext.getResources();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        DISPLAYFEATURES_DC_DIMMING_NODE = mContext.getResources().getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+        DISPLAYFEATURES_DC_DIMMING_NODE = res.getString(R.string.config_DisplayFeaturesDcDimPath);
         final boolean enabled = !(sharedPrefs.getBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, false));
 
         FileUtils.writeLine(DISPLAYFEATURES_DC_DIMMING_NODE, enabled ? "1" : "0");
