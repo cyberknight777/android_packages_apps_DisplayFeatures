@@ -17,8 +17,6 @@
 
 package com.android.displayfeatures.display;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -31,34 +29,23 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         Preference.OnPreferenceChangeListener {
 
     private SwitchPreference mDcDimmingPreference;
-    private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
-    private String DISPLAYFEATURES_DC_DIMMING_NODE;
-
     private SwitchPreference mHBMPreference;
-    private static final String DISPLAYFEATURES_HBM_KEY = "hbm";
-    private String DISPLAYFEATURES_HBM_NODE;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Resources res = context.getResources();
-        DISPLAYFEATURES_DC_DIMMING_NODE = res.getString(R.string.config_DisplayFeaturesDcDimPath);
-        DISPLAYFEATURES_HBM_NODE = res.getString(R.string.config_DisplayFeaturesHbmPath);
-    }
+    private DisplayFeaturesConfig mConfig;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.displayfeatures_settings, rootKey);
-        mDcDimmingPreference = (SwitchPreference) findPreference(DISPLAYFEATURES_DC_DIMMING_KEY);
-        if (FileUtils.fileExists(DISPLAYFEATURES_DC_DIMMING_NODE)) {
+        mConfig = DisplayFeaturesConfig.getInstance(getContext());
+        mDcDimmingPreference = (SwitchPreference) findPreference(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY);
+        if (FileUtils.fileExists(mConfig.getDcDimPath())) {
             mDcDimmingPreference.setEnabled(true);
             mDcDimmingPreference.setOnPreferenceChangeListener(this);
         } else {
             mDcDimmingPreference.setSummary(R.string.dc_dimming_summary_not_supported);
             mDcDimmingPreference.setEnabled(false);
         }
-        mHBMPreference = (SwitchPreference) findPreference(DISPLAYFEATURES_HBM_KEY);
-        if (FileUtils.fileExists(DISPLAYFEATURES_HBM_NODE)) {
+        mHBMPreference = (SwitchPreference) findPreference(mConfig.DISPLAYFEATURES_HBM_KEY);
+        if (FileUtils.fileExists(mConfig.getHbmPath())) {
             mHBMPreference.setEnabled(true);
             mHBMPreference.setOnPreferenceChangeListener(this);
         } else {
@@ -69,11 +56,11 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (DISPLAYFEATURES_DC_DIMMING_KEY.equals(preference.getKey())) {
-            FileUtils.writeLine(DISPLAYFEATURES_DC_DIMMING_NODE, (Boolean) newValue ? "1":"0");
+        if (mConfig.DISPLAYFEATURES_DC_DIMMING_KEY.equals(preference.getKey())) {
+            FileUtils.writeLine(mConfig.getDcDimPath(), (Boolean) newValue ? "1":"0");
         }
-        if (DISPLAYFEATURES_HBM_KEY.equals(preference.getKey())) {
-            FileUtils.writeLine(DISPLAYFEATURES_HBM_NODE, (Boolean) newValue ? "1" : "0");
+        if (mConfig.DISPLAYFEATURES_HBM_KEY.equals(preference.getKey())) {
+            FileUtils.writeLine(mConfig.getHbmPath(), (Boolean) newValue ? "1" : "0");
         }
         return true;
     }

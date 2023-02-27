@@ -16,8 +16,6 @@
 
 package com.android.displayfeatures.display;
 
-import android.content.res.Resources;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
@@ -29,9 +27,7 @@ import com.android.displayfeatures.utils.FileUtils;
 
 public class DisplayFeaturesHbmTileService extends TileService {
 
-    private Context mContext;
-    private static final String DISPLAYFEATURES_HBM_KEY = "hbm";
-    private String DISPLAYFEATURES_HBM_NODE;
+    private DisplayFeaturesConfig mConfig;
 
     private void updateUI(boolean enabled) {
         final Tile tile = getQsTile();
@@ -42,8 +38,9 @@ public class DisplayFeaturesHbmTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+        mConfig = DisplayFeaturesConfig.getInstance(this);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        updateUI(sharedPrefs.getBoolean(DISPLAYFEATURES_HBM_KEY, false));
+        updateUI(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false));
     }
 
     @Override
@@ -55,14 +52,11 @@ public class DisplayFeaturesHbmTileService extends TileService {
     public void onClick() {
         super.onClick();
 
-        mContext = this;
-        Resources res = mContext.getResources();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        DISPLAYFEATURES_HBM_NODE = res.getString(R.string.config_DisplayFeaturesHbmPath);
-        final boolean enabled = !(sharedPrefs.getBoolean(DISPLAYFEATURES_HBM_KEY, false));
+        final boolean enabled = !(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false));
 
-        FileUtils.writeLine(DISPLAYFEATURES_HBM_NODE, enabled ? "1" : "0");
-        sharedPrefs.edit().putBoolean(DISPLAYFEATURES_HBM_KEY, enabled).commit();
+        FileUtils.writeLine(mConfig.getHbmPath(), enabled ? "1" : "0");
+        sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
         updateUI(enabled);
     }
 }

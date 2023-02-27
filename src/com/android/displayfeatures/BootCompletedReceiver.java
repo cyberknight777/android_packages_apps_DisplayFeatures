@@ -21,8 +21,8 @@ package com.android.displayfeatures;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.util.Log;
+import com.android.displayfeatures.display.DisplayFeaturesConfig;
 import com.android.displayfeatures.utils.FileUtils;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
@@ -31,26 +31,19 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     private static final boolean DEBUG = false;
     private static final String TAG = "DisplayFeatures";
 
-    private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
-    private String DISPLAYFEATURES_DC_DIMMING_NODE;
-
-    private static final String DISPLAYFEATURES_HBM_KEY = "hbm";
-    private String DISPLAYFEATURES_HBM_NODE;
-
     @Override
     public void onReceive(final Context context, Intent intent) {
         if (DEBUG)
             Log.d(TAG, "Received boot completed intent");
 
-        Resources res = context.getResources();
-        DISPLAYFEATURES_DC_DIMMING_NODE = res.getString(R.string.config_DisplayFeaturesDcDimPath);
-        DISPLAYFEATURES_HBM_NODE = res.getString(R.string.config_DisplayFeaturesHbmPath);
+        DisplayFeaturesConfig mConfig = DisplayFeaturesConfig.getInstance(context);
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        boolean dcDimmingEnabled = sharedPrefs.getBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, false);
-        boolean hbmEnabled = sharedPrefs.getBoolean(DISPLAYFEATURES_HBM_KEY, false);
-        FileUtils.writeLine(DISPLAYFEATURES_DC_DIMMING_NODE, dcDimmingEnabled ? "1" : "0");
-        FileUtils.writeLine(DISPLAYFEATURES_HBM_NODE, hbmEnabled ? "1" : "0");
+        boolean dcDimmingEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false);
+        boolean hbmEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false);
+        FileUtils.writeLine(mConfig.getDcDimPath(), dcDimmingEnabled ? "1" : "0");
+        FileUtils.writeLine(mConfig.getHbmPath(), hbmEnabled ? "1" : "0");
 
     }
 }

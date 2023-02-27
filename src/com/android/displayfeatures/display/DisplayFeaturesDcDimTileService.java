@@ -16,8 +16,6 @@
 
 package com.android.displayfeatures.display;
 
-import android.content.res.Resources;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Icon;
 import android.service.quicksettings.Tile;
@@ -30,9 +28,7 @@ import com.android.displayfeatures.utils.FileUtils;
 
 public class DisplayFeaturesDcDimTileService extends TileService {
 
-    private Context mContext;
-    private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
-    private String DISPLAYFEATURES_DC_DIMMING_NODE;
+    private DisplayFeaturesConfig mConfig;
 
     private void updateUI(boolean enabled) {
         final Tile tile = getQsTile();
@@ -44,8 +40,9 @@ public class DisplayFeaturesDcDimTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+        mConfig = DisplayFeaturesConfig.getInstance(this);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        updateUI(sharedPrefs.getBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, false));
+        updateUI(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false));
     }
 
     @Override
@@ -57,14 +54,11 @@ public class DisplayFeaturesDcDimTileService extends TileService {
     public void onClick() {
         super.onClick();
 
-        mContext = this;
-        Resources res = mContext.getResources();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        DISPLAYFEATURES_DC_DIMMING_NODE = res.getString(R.string.config_DisplayFeaturesDcDimPath);
-        final boolean enabled = !(sharedPrefs.getBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, false));
+        final boolean enabled = !(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false));
 
-        FileUtils.writeLine(DISPLAYFEATURES_DC_DIMMING_NODE, enabled ? "1" : "0");
-        sharedPrefs.edit().putBoolean(DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
+        FileUtils.writeLine(mConfig.getDcDimPath(), enabled ? "1" : "0");
+        sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
         updateUI(enabled);
     }
 }
