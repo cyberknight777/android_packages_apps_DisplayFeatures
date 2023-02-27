@@ -19,16 +19,17 @@
 package com.android.displayfeatures.display;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
+import com.android.settingslib.collapsingtoolbar.R;
 
-public class DisplayFeaturesActivity extends PreferenceActivity {
+public class DisplayFeaturesActivity extends CollapsingToolbarBaseActivity {
 
     private static final String TAG_DISPLAYFEATURES = "displayfeatures";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content,
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
                 new DisplayFeaturesFragment(), TAG_DISPLAYFEATURES).commit();
     }
 }

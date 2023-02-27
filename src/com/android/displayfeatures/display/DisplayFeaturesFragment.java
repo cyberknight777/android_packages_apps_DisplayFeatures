@@ -20,17 +20,15 @@ package com.android.displayfeatures.display;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.MenuItem;
 import androidx.preference.Preference;
-import androidx.preference.Preference.OnPreferenceChangeListener;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.android.displayfeatures.R;
 import com.android.displayfeatures.utils.FileUtils;
 
-public class DisplayFeaturesFragment extends PreferenceFragment implements
-        OnPreferenceChangeListener {
+public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
+        Preference.OnPreferenceChangeListener {
 
     private SwitchPreference mDcDimmingPreference;
     private static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
@@ -50,8 +48,7 @@ public class DisplayFeaturesFragment extends PreferenceFragment implements
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.displayfeatures_settings);
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        setPreferencesFromResource(R.xml.displayfeatures_settings, rootKey);
         mDcDimmingPreference = (SwitchPreference) findPreference(DISPLAYFEATURES_DC_DIMMING_KEY);
         if (FileUtils.fileExists(DISPLAYFEATURES_DC_DIMMING_NODE)) {
             mDcDimmingPreference.setEnabled(true);
@@ -79,15 +76,6 @@ public class DisplayFeaturesFragment extends PreferenceFragment implements
             FileUtils.writeLine(DISPLAYFEATURES_HBM_NODE, (Boolean) newValue ? "1" : "0");
         }
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            getActivity().onBackPressed();
-            return true;
-        }
-        return false;
     }
 
 }
