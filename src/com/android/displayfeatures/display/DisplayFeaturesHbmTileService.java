@@ -53,10 +53,10 @@ public class DisplayFeaturesHbmTileService extends TileService {
         super.onClick();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean enabled = !(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false));
+        final boolean enabled = !(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false));
 
         FileUtils.writeLine(mConfig.getHbmPath(), enabled ? "1" : "0");
-        sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
+        sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, enabled).commit();
         updateUI(enabled);
     }
 }
