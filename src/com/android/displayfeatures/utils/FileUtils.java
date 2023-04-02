@@ -145,4 +145,17 @@ public final class FileUtils {
     }
     return ok;
   }
+
+  /**
+   * Gets value of a node as a boolean
+   *
+   * @return default value that is passed by function caller
+   */
+  public static boolean getNodeValueAsBoolean(String filename, boolean defValue) {
+    String fileValue = readOneLine(filename);
+    if (fileValue != null) {
+      return (!fileValue.equals("0"));
+    }
+    return defValue;
+  }
 }

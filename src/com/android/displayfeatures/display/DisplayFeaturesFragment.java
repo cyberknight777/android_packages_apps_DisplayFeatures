@@ -17,9 +17,17 @@
 
 package com.android.displayfeatures.display;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.UserHandle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.android.displayfeatures.R;
@@ -31,6 +39,42 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
     private SwitchPreference mDcDimmingPreference;
     private SwitchPreference mHBMPreference;
     private DisplayFeaturesConfig mConfig;
+    private boolean mInternalHbmStart = false;
+    private boolean mInternalDcDimStart = false;
+
+    private final BroadcastReceiver mServiceStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(mConfig.ACTION_HBM_SERVICE_CHANGED)) {
+                if (mInternalHbmStart) {
+                        mInternalHbmStart = false;
+                        return;
+                }
+
+                if (mHBMPreference == null) return;
+
+                final boolean hbmStarted = intent.getBooleanExtra(
+                            mConfig.EXTRA_HBM_STATE, false);
+
+                mHBMPreference.setChecked(hbmStarted);
+
+            } else if (action.equals(mConfig.ACTION_DC_DIM_SERVICE_CHANGED)) {
+                if (mInternalDcDimStart) {
+                        mInternalDcDimStart = false;
+                        return;
+                }
+
+                if (mDcDimmingPreference == null) return;
+
+                final boolean dcDimStarted = intent.getBooleanExtra(
+                            mConfig.EXTRA_DC_DIM_STATE, false);
+
+                mDcDimmingPreference.setChecked(dcDimStarted);
+
+           }
+        }
+    };
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -52,15 +96,69 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
             mHBMPreference.setEnabled(false);
         }
+        mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
+        mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
+
+        // Registering observers
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(mConfig.ACTION_HBM_SERVICE_CHANGED);
+        filter.addAction(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
+        getContext().registerReceiver(mServiceStateReceiver, filter);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
+        mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
+    }
+
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (mConfig.DISPLAYFEATURES_DC_DIMMING_KEY.equals(preference.getKey())) {
+            mInternalHbmStart = true;
+            Context mContext = getContext();
+
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+
             FileUtils.writeLine(mConfig.getDcDimPath(), (Boolean) newValue ? "1":"0");
+
+            boolean enabled = mConfig.isCurrentlyEnabled(mConfig.getDcDimPath());
+
+            sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
+
+            Intent dcDimIntent = new Intent(mContext,
+                    com.android.displayfeatures.display.DisplayFeaturesDcDimService.class);
+
+            if (enabled) mContext.startService(dcDimIntent);
+            else mContext.stopService(dcDimIntent);
+
+            Intent intent = new Intent(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
+
+            intent.putExtra(mConfig.EXTRA_DC_DIM_STATE, enabled);
+            intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+            mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
         }
         if (mConfig.DISPLAYFEATURES_HBM_KEY.equals(preference.getKey())) {
+            mInternalHbmStart = true;
+            Context mContext = getContext();
+
             FileUtils.writeLine(mConfig.getHbmPath(), (Boolean) newValue ? "1" : "0");
+
+            boolean enabled = mConfig.isCurrentlyEnabled(mConfig.getHbmPath());
+
+            Intent hbmIntent = new Intent(mContext,
+                    com.android.displayfeatures.display.DisplayFeaturesHbmService.class);
+
+            if (enabled) mContext.startService(hbmIntent);
+            else mContext.stopService(hbmIntent);
+
+            Intent intent = new Intent(mConfig.ACTION_HBM_SERVICE_CHANGED);
+
+            intent.putExtra(mConfig.EXTRA_HBM_STATE, enabled);
+            intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+            mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
         }
         return true;
     }

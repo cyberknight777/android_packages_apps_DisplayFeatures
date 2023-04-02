@@ -16,7 +16,13 @@
 
 package com.android.displayfeatures.display;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
@@ -29,8 +35,27 @@ public class DisplayFeaturesHbmTileService extends TileService {
 
     private DisplayFeaturesConfig mConfig;
 
-    private void updateUI(boolean enabled) {
+    private Intent mHbmIntent;
+
+    private boolean mInternalStart;
+
+    private final BroadcastReceiver mServiceStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mInternalStart) {
+                mInternalStart = false;
+                return;
+            }
+            updateUI();
+        }
+    };
+
+    private void updateUI() {
         final Tile tile = getQsTile();
+        boolean enabled = mConfig.isCurrentlyEnabled(mConfig.getHbmPath());
+
+        if (!enabled) tryStopService();
+
         tile.setState(enabled ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
         tile.updateTile();
     }
@@ -39,24 +64,45 @@ public class DisplayFeaturesHbmTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         mConfig = DisplayFeaturesConfig.getInstance(this);
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        updateUI(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false));
+
+        updateUI();
+
+        IntentFilter filter = new IntentFilter(mConfig.ACTION_HBM_SERVICE_CHANGED);
+        registerReceiver(mServiceStateReceiver, filter);
     }
 
     @Override
     public void onStopListening() {
         super.onStopListening();
+        unregisterReceiver(mServiceStateReceiver);
     }
 
     @Override
     public void onClick() {
         super.onClick();
+        mInternalStart = true;
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean enabled = !(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false));
-
+        boolean enabled = !mConfig.isCurrentlyEnabled(mConfig.getHbmPath());
         FileUtils.writeLine(mConfig.getHbmPath(), enabled ? "1" : "0");
-        sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, enabled).commit();
-        updateUI(enabled);
+
+        Intent hbmIntent = new Intent(this,
+        com.android.displayfeatures.display.DisplayFeaturesHbmService.class);
+
+        if (enabled) this.startService(hbmIntent);
+        else this.stopService(hbmIntent);
+
+        Intent intent = new Intent(mConfig.ACTION_HBM_SERVICE_CHANGED);
+
+        intent.putExtra(mConfig.EXTRA_HBM_STATE, enabled);
+        intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+        this.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
+
+        updateUI();
+    }
+
+    private void tryStopService() {
+        if (mHbmIntent == null) return;
+        this.stopService(mHbmIntent);
+        mHbmIntent = null;
     }
 }

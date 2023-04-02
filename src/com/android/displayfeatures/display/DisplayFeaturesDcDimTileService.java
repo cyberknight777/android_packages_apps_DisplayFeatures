@@ -16,8 +16,14 @@
 
 package com.android.displayfeatures.display;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Icon;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
@@ -30,8 +36,27 @@ public class DisplayFeaturesDcDimTileService extends TileService {
 
     private DisplayFeaturesConfig mConfig;
 
-    private void updateUI(boolean enabled) {
+    private Intent mDcDimIntent;
+
+    private boolean mInternalStart;
+
+    private final BroadcastReceiver mServiceStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mInternalStart) {
+                mInternalStart = false;
+                return;
+            }
+            updateUI();
+        }
+    };
+
+    private void updateUI() {
         final Tile tile = getQsTile();
+        boolean enabled = mConfig.isCurrentlyEnabled(mConfig.getDcDimPath());
+
+        if (!enabled) tryStopService();
+
         tile.setIcon(Icon.createWithResource(this, enabled ? R.drawable.ic_dc_dimming_on : R.drawable.ic_dc_dimming_off));
         tile.setState(enabled ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
         tile.updateTile();
@@ -41,24 +66,49 @@ public class DisplayFeaturesDcDimTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         mConfig = DisplayFeaturesConfig.getInstance(this);
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        updateUI(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false));
+
+        updateUI();
+
+        IntentFilter filter = new IntentFilter(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
+        registerReceiver(mServiceStateReceiver, filter);
     }
 
     @Override
     public void onStopListening() {
         super.onStopListening();
+        unregisterReceiver(mServiceStateReceiver);
     }
 
     @Override
     public void onClick() {
         super.onClick();
+        mInternalStart = true;
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean enabled = !(sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false));
 
+        boolean enabled = !mConfig.isCurrentlyEnabled(mConfig.getDcDimPath());
         FileUtils.writeLine(mConfig.getDcDimPath(), enabled ? "1" : "0");
+
         sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
-        updateUI(enabled);
+
+        Intent dcDimIntent = new Intent(this,
+        com.android.displayfeatures.display.DisplayFeaturesDcDimService.class);
+
+        if (enabled) this.startService(dcDimIntent);
+        else this.stopService(dcDimIntent);
+
+        Intent intent = new Intent(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
+
+        intent.putExtra(mConfig.EXTRA_DC_DIM_STATE, enabled);
+        intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+        this.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
+
+        updateUI();
+    }
+
+    private void tryStopService() {
+        if (mDcDimIntent == null) return;
+        this.stopService(mDcDimIntent);
+        mDcDimIntent = null;
     }
 }

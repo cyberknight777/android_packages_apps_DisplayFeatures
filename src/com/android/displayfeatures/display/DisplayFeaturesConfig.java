@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import com.android.settingslib.widget.R;
 
+import com.android.displayfeatures.utils.FileUtils;
+
 public class DisplayFeaturesConfig {
 
     private static DisplayFeaturesConfig instance = null;
@@ -39,6 +41,12 @@ public class DisplayFeaturesConfig {
     private final String config_DisplayFeaturesDcDimPath;
     private final String config_DisplayFeaturesHbmPath;
 
+    public static final String ACTION_HBM_SERVICE_CHANGED = "com.android.displayfeatures.display.HBM_SERVICE_CHANGED";
+    public static final String EXTRA_HBM_STATE = "hbmenabled";
+
+    public static final String ACTION_DC_DIM_SERVICE_CHANGED = "com.android.displayfeatures.display.DC_DIM_SERVICE_CHANGED";
+    public static final String EXTRA_DC_DIM_STATE = "dcdimenabled";
+
     private DisplayFeaturesConfig(Context context) {
 
 	Resources res = context.getResources();
@@ -48,11 +56,15 @@ public class DisplayFeaturesConfig {
 
     }
 
-     public String getDcDimPath() {
+    public String getDcDimPath() {
         return config_DisplayFeaturesDcDimPath;
     }
 
-     public String getHbmPath() {
+    public String getHbmPath() {
         return config_DisplayFeaturesHbmPath;
+    }
+
+    public boolean isCurrentlyEnabled(String node) {
+        return FileUtils.getNodeValueAsBoolean(node, false);
     }
  }
