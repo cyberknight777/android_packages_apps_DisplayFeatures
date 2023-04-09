@@ -128,12 +128,6 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
             sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, enabled).commit();
 
-            Intent dcDimIntent = new Intent(mContext,
-                    com.android.displayfeatures.display.DisplayFeaturesDcDimService.class);
-
-            if (enabled) mContext.startService(dcDimIntent);
-            else mContext.stopService(dcDimIntent);
-
             Intent intent = new Intent(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
 
             intent.putExtra(mConfig.EXTRA_DC_DIM_STATE, enabled);
