@@ -197,8 +197,8 @@ public class DisplayFeaturesFpsService extends Service {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.LEFT | Gravity.TOP;
-        params.verticalMargin = 0.03f;
+        params.gravity = Gravity.END | Gravity.TOP;
+        params.y = 50;
         params.setTitle("FPS Info");
 
         startThread();
