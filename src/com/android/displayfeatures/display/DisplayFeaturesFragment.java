@@ -38,9 +38,11 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
     private SwitchPreference mDcDimmingPreference;
     private SwitchPreference mHBMPreference;
+    private SwitchPreference mFpsPreference;
     private DisplayFeaturesConfig mConfig;
     private boolean mInternalHbmStart = false;
     private boolean mInternalDcDimStart = false;
+    private boolean mInternalFpsStart = false;
 
     private final BroadcastReceiver mServiceStateReceiver = new BroadcastReceiver() {
         @Override
@@ -72,7 +74,19 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
                 mDcDimmingPreference.setChecked(dcDimStarted);
 
-           }
+	    } else if (action.equals(mConfig.ACTION_FPS_SERVICE_CHANGED)) {
+		if (mInternalFpsStart) {
+		    mInternalFpsStart = false;
+		    return;
+		}
+
+		if (mFpsPreference == null) return;
+
+		final boolean fpsStarted = intent.getBooleanExtra(
+                            mConfig.EXTRA_FPS_STATE, false);
+
+		mFpsPreference.setChecked(fpsStarted);
+	    }
         }
     };
 
@@ -96,13 +110,19 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
             mHBMPreference.setEnabled(false);
         }
+        mFpsPreference = (SwitchPreference) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
+        if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setOnPreferenceChangeListener(this);
+        else mFpsPreference.setSummary(R.string.fps_summary_not_supported);
+
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
+        mFpsPreference.setChecked(isFpsOverlayRunning());
 
         // Registering observers
         IntentFilter filter = new IntentFilter();
         filter.addAction(mConfig.ACTION_HBM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
+        filter.addAction(mConfig.ACTION_FPS_SERVICE_CHANGED);
         getContext().registerReceiver(mServiceStateReceiver, filter);
     }
 
@@ -111,6 +131,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         super.onResume();
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
+        mFpsPreference.setChecked(isFpsOverlayRunning());
     }
 
 
@@ -154,7 +175,22 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
             mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
         }
+	if (mConfig.DISPLAYFEATURES_FPS_KEY.equals(preference.getKey())) {
+	    mInternalFpsStart = true;
+	    Context mContext = getContext();
+
+	    boolean enabled = (Boolean) newValue;
+	    Intent fpsinfo = new Intent(mContext,
+		    com.android.displayfeatures.display.DisplayFeaturesFpsService.class);
+	    if (enabled) mContext.startService(fpsinfo);
+	    else mContext.stopService(fpsinfo);
+	}
         return true;
     }
 
+    private boolean isFpsOverlayRunning() {
+        Context context = getContext();
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPrefs.getBoolean(mConfig.PREF_KEY_FPS_STATE, false);
+    }
 }

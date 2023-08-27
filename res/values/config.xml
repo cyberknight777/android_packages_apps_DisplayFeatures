@@ -19,4 +19,7 @@
 
     <!-- Path to HBM sysfs node -->
     <string name="config_DisplayFeaturesHbmPath" translatable="false"></string>
+
+    <!-- Path to FPS Overlay sysfs node -->
+    <string name="config_DisplayFeaturesFpsPath" translatable="false"></string>
 </resources>

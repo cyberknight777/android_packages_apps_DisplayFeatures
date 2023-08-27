@@ -45,5 +45,8 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         FileUtils.writeLine(mConfig.getDcDimPath(), dcDimmingEnabled ? "1" : "0");
         FileUtils.writeLine(mConfig.getHbmPath(), hbmEnabled ? "1" : "0");
 
+        // reset prefs that reflect a state that does not retain a reboot
+        sharedPrefs.edit().remove(mConfig.PREF_KEY_FPS_STATE).commit();
+
     }
 }

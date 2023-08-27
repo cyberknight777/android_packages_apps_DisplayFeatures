@@ -29,4 +29,11 @@
         android:defaultValue="false"
         android:title="@string/hbm_title"
         android:summary="@string/hbm_summary" />
+
+    <SwitchPreference
+        android:key="fps"
+        android:title="@string/fps_title"
+        android:summary="@string/fps_summary"
+        android:persistent="true" />
+
 </PreferenceScreen>
