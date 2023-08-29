@@ -28,4 +28,9 @@
     <string name="hbm_summary">Allows the display panel brightness to go above the maximum stock value. Which helps in improving visibility in direct sunlight</string>
     <string name="hbm_summary_not_supported">HBM is currently not supported by the kernel</string>
 
+    <!-- FPS overlay settings -->
+    <string name="fps_title">FPS Overlay</string>
+    <string name="fps_summary">Shows overlay with current frames per second</string>
+    <string name="fps_summary_not_supported">FPS Overlay is currently not supported by the kernel</string>
+
 </resources>

@@ -37,9 +37,11 @@ public class DisplayFeaturesConfig {
 
     public static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
     public static final String DISPLAYFEATURES_HBM_KEY = "hbm";
+    public static final String DISPLAYFEATURES_FPS_KEY = "fps";
 
     private final String config_DisplayFeaturesDcDimPath;
     private final String config_DisplayFeaturesHbmPath;
+    private final String config_DisplayFeaturesFpsPath;
 
     public static final String ACTION_HBM_SERVICE_CHANGED = "com.android.displayfeatures.display.HBM_SERVICE_CHANGED";
     public static final String EXTRA_HBM_STATE = "hbmenabled";
@@ -47,12 +49,17 @@ public class DisplayFeaturesConfig {
     public static final String ACTION_DC_DIM_SERVICE_CHANGED = "com.android.displayfeatures.display.DC_DIM_SERVICE_CHANGED";
     public static final String EXTRA_DC_DIM_STATE = "dcdimenabled";
 
+    public static final String ACTION_FPS_SERVICE_CHANGED = "com.android.displayfeatures.display.FPS_SERVICE_CHANGED";
+    public static final String EXTRA_FPS_STATE = "fpsenabled";
+    public static final String PREF_KEY_FPS_STATE = "fps_running";
+
     private DisplayFeaturesConfig(Context context) {
 
 	Resources res = context.getResources();
 
 	config_DisplayFeaturesDcDimPath = res.getString(R.string.config_DisplayFeaturesDcDimPath);
 	config_DisplayFeaturesHbmPath = res.getString(R.string.config_DisplayFeaturesHbmPath);
+	config_DisplayFeaturesFpsPath = res.getString(R.string.config_DisplayFeaturesFpsPath);
 
     }
 
@@ -62,6 +69,10 @@ public class DisplayFeaturesConfig {
 
     public String getHbmPath() {
         return config_DisplayFeaturesHbmPath;
+    }
+
+    public String getFpsPath() {
+	return config_DisplayFeaturesFpsPath;
     }
 
     public boolean isCurrentlyEnabled(String node) {
