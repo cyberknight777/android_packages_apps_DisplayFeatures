@@ -28,4 +28,9 @@
     <string name="hbm_summary">Permite que el brillo del panel de visualización supere el valor máximo de stock. Lo que ayuda a mejorar la visibilidad con luz solar directa.</string>
     <string name="hbm_summary_not_supported">El modo de brillo alto no esta actualmente soportado por el kernel</string>
 
+    <!-- FPS overlay settings -->
+    <string name="fps_title">Superposición de FPS</string>
+    <string name="fps_summary">Muestra una superposición con los fotogramas por segundo actuales</string>
+    <string name="fps_summary_not_supported">El kernel no admite actualmente la superposición de FPS</string>
+
 </resources>
