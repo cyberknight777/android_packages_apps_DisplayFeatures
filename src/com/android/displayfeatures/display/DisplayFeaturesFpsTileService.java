@@ -54,7 +54,7 @@ public class DisplayFeaturesFpsTileService extends TileService {
         mIsShowing = isRunning();
         updateTile();
         IntentFilter filter = new IntentFilter(mConfig.ACTION_FPS_SERVICE_CHANGED);
-        registerReceiver(mServiceStateReceiver, filter);
+        registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_EXPORTED);
     }
 
     @Override

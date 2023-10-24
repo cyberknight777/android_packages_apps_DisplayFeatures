@@ -61,7 +61,7 @@ public class DisplayFeaturesHbmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mReceiver, intentFilter);
+        registerReceiver(mReceiver, intentFilter, Context.RECEIVER_EXPORTED);
         return START_REDELIVER_INTENT;
     }
 

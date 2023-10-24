@@ -70,7 +70,7 @@ public class DisplayFeaturesDcDimTileService extends TileService {
         updateUI();
 
         IntentFilter filter = new IntentFilter(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
-        registerReceiver(mServiceStateReceiver, filter);
+        registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_EXPORTED);
     }
 
     @Override

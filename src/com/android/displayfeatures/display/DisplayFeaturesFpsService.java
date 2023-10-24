@@ -216,7 +216,7 @@ public class DisplayFeaturesFpsService extends Service {
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
         IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mScreenStateReceiver, screenStateFilter);
+        registerReceiver(mScreenStateReceiver, screenStateFilter, Context.RECEIVER_EXPORTED);
 
         WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
         wm.addView(mView, params);

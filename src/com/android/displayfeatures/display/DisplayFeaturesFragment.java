@@ -123,7 +123,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         filter.addAction(mConfig.ACTION_HBM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_FPS_SERVICE_CHANGED);
-        getContext().registerReceiver(mServiceStateReceiver, filter);
+        getContext().registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
     }
 
     @Override
