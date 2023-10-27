@@ -188,6 +188,13 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         return true;
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().unregisterReceiver(mServiceStateReceiver);
+    }
+
     private boolean isFpsOverlayRunning() {
         Context context = getContext();
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
