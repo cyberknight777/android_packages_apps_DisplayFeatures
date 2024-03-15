@@ -18,7 +18,6 @@ package com.android.displayfeatures.display;
 
 import android.content.Context;
 import android.content.res.Resources;
-import com.android.settingslib.widget.R;
 
 import com.android.displayfeatures.utils.FileUtils;
 
@@ -57,9 +56,9 @@ public class DisplayFeaturesConfig {
 
 	Resources res = context.getResources();
 
-	config_DisplayFeaturesDcDimPath = res.getString(R.string.config_DisplayFeaturesDcDimPath);
-	config_DisplayFeaturesHbmPath = res.getString(R.string.config_DisplayFeaturesHbmPath);
-	config_DisplayFeaturesFpsPath = res.getString(R.string.config_DisplayFeaturesFpsPath);
+	config_DisplayFeaturesDcDimPath = res.getString(com.android.settingslib.collapsingtoolbar.R.string.config_DisplayFeaturesDcDimPath);
+	config_DisplayFeaturesHbmPath = res.getString(com.android.settingslib.collapsingtoolbar.R.string.config_DisplayFeaturesHbmPath);
+	config_DisplayFeaturesFpsPath = res.getString(com.android.settingslib.collapsingtoolbar.R.string.config_DisplayFeaturesFpsPath);
 
     }
 
