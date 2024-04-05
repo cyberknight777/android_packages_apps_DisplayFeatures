@@ -28,7 +28,8 @@
 
     <application
         android:label="@string/display_features_title"
-        android:persistent="true">
+        android:persistent="true"
+        android:theme="@style/Theme.SubSettingsBase">
 
         <receiver
             android:name=".BootCompletedReceiver"
