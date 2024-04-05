@@ -18,19 +18,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/display_features_title">
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="dc_dimming"
         android:defaultValue="false"
         android:title="@string/dc_dimming_title"
         android:summary="@string/dc_dimming_summary" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="hbm"
         android:defaultValue="false"
         android:title="@string/hbm_title"
         android:summary="@string/hbm_summary" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="fps"
         android:title="@string/fps_title"
         android:summary="@string/fps_summary"

@@ -28,7 +28,7 @@ import android.os.UserHandle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.displayfeatures.R;
 import com.android.displayfeatures.utils.FileUtils;
@@ -36,9 +36,9 @@ import com.android.displayfeatures.utils.FileUtils;
 public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         Preference.OnPreferenceChangeListener {
 
-    private SwitchPreference mDcDimmingPreference;
-    private SwitchPreference mHBMPreference;
-    private SwitchPreference mFpsPreference;
+    private SwitchPreferenceCompat mDcDimmingPreference;
+    private SwitchPreferenceCompat mHBMPreference;
+    private SwitchPreferenceCompat mFpsPreference;
     private DisplayFeaturesConfig mConfig;
     private boolean mInternalHbmStart = false;
     private boolean mInternalDcDimStart = false;
@@ -94,7 +94,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.displayfeatures_settings, rootKey);
         mConfig = DisplayFeaturesConfig.getInstance(getContext());
-        mDcDimmingPreference = (SwitchPreference) findPreference(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY);
+        mDcDimmingPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY);
         if (FileUtils.fileExists(mConfig.getDcDimPath())) {
             mDcDimmingPreference.setEnabled(true);
             mDcDimmingPreference.setOnPreferenceChangeListener(this);
@@ -102,7 +102,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mDcDimmingPreference.setSummary(R.string.dc_dimming_summary_not_supported);
             mDcDimmingPreference.setEnabled(false);
         }
-        mHBMPreference = (SwitchPreference) findPreference(mConfig.DISPLAYFEATURES_HBM_KEY);
+        mHBMPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_HBM_KEY);
         if (FileUtils.fileExists(mConfig.getHbmPath())) {
             mHBMPreference.setEnabled(true);
             mHBMPreference.setOnPreferenceChangeListener(this);
@@ -110,7 +110,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
             mHBMPreference.setEnabled(false);
         }
-        mFpsPreference = (SwitchPreference) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
+        mFpsPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
         if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setOnPreferenceChangeListener(this);
         else mFpsPreference.setSummary(R.string.fps_summary_not_supported);
 
