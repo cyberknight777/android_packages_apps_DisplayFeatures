@@ -56,9 +56,9 @@ public class DisplayFeaturesConfig {
 
 	Resources res = context.getResources();
 
-	config_DisplayFeaturesDcDimPath = res.getString(com.android.settingslib.collapsingtoolbar.R.string.config_DisplayFeaturesDcDimPath);
-	config_DisplayFeaturesHbmPath = res.getString(com.android.settingslib.collapsingtoolbar.R.string.config_DisplayFeaturesHbmPath);
-	config_DisplayFeaturesFpsPath = res.getString(com.android.settingslib.collapsingtoolbar.R.string.config_DisplayFeaturesFpsPath);
+	config_DisplayFeaturesDcDimPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
+	config_DisplayFeaturesHbmPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
+	config_DisplayFeaturesFpsPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesFpsPath);
 
     }
 
