@@ -217,7 +217,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
             FileUtils.writeLine(mConfig.getCabcPath(), (String) newValue);
 
-            boolean enabled = mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath());
+            String enabled = mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath());
 
 	//            sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_CABC_KEY, enabled).commit();
 
