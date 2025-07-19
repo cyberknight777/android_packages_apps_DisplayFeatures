@@ -131,7 +131,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         else mFpsPreference.setSummary(R.string.fps_summary_not_supported);
         mCABCPreference = (ListPreference) findPreference(mConfig.DISPLAYFEATURES_CABC_KEY);
         if (FileUtils.fileExists(mConfig.getCabcPath())) mCABCPreference.setOnPreferenceChangeListener(this);
-        else mCABCPreference.removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
+        else getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
 
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
