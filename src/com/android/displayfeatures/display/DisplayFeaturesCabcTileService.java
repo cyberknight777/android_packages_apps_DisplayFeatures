@@ -38,6 +38,7 @@ import com.android.displayfeatures.utils.FileUtils;
 public class DisplayFeaturesCabcTileService extends TileService {
 
     private DisplayFeaturesConfig mConfig;
+    private Context context;
 
     private String[] CabcModes;
     private String[] CabcValues;
@@ -62,10 +63,9 @@ public class DisplayFeaturesCabcTileService extends TileService {
 
     public void onCreate() {
         super.onCreate();
-        mConfig = DisplayFeaturesConfig.getInstance(this);
-        Resources res = mConfig.getResources();
-        CabcModes = res.getStringArray(R.array.cabc_modes);
-        CabcValues = res.getStringArray(R.array.cabc_values);
+        context = getApplicationContext();
+        CabcModes = context.getResources().getStringArray(R.array.cabc_modes);
+        CabcValues = context.getResources().getStringArray(R.array.cabc_values);
     }
 
     private void updateCurrentCabcmode() {
@@ -83,12 +83,11 @@ public class DisplayFeaturesCabcTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         mConfig = DisplayFeaturesConfig.getInstance(this);
-        Resources res = mConfig.getResources();
         tile = getQsTile();
 
         if (!FileUtils.fileExists(mConfig.getCabcPath())) {
             tile.setState(Tile.STATE_UNAVAILABLE);
-            tile.setSubtitle(res.getString(R.string.cabc_summary_not_supported));
+            tile.setSubtitle(getResources().getString(R.string.cabc_summary_not_supported));
             tile.updateTile();
             return;
         }
