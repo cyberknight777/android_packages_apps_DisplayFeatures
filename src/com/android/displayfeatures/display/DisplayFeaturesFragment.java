@@ -39,10 +39,12 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
     private SwitchPreferenceCompat mDcDimmingPreference;
     private SwitchPreferenceCompat mHBMPreference;
     private SwitchPreferenceCompat mFpsPreference;
+    private ListPreference mCABCPreference;
     private DisplayFeaturesConfig mConfig;
     private boolean mInternalHbmStart = false;
     private boolean mInternalDcDimStart = false;
     private boolean mInternalFpsStart = false;
+    private boolean mInternalCabcStart = false;
 
     private final BroadcastReceiver mServiceStateReceiver = new BroadcastReceiver() {
         @Override
@@ -74,19 +76,32 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
                 mDcDimmingPreference.setChecked(dcDimStarted);
 
-	    } else if (action.equals(mConfig.ACTION_FPS_SERVICE_CHANGED)) {
-		if (mInternalFpsStart) {
-		    mInternalFpsStart = false;
-		    return;
-		}
+            } else if (action.equals(mConfig.ACTION_FPS_SERVICE_CHANGED)) {
+                if (mInternalFpsStart) {
+                        mInternalFpsStart = false;
+                        return;
+                }
 
-		if (mFpsPreference == null) return;
+                if (mFpsPreference == null) return;
 
-		final boolean fpsStarted = intent.getBooleanExtra(
-                            mConfig.EXTRA_FPS_STATE, false);
+                        final boolean fpsStarted = intent.getBooleanExtra(
+                                    mConfig.EXTRA_FPS_STATE, false);
 
-		mFpsPreference.setChecked(fpsStarted);
-	    }
+                        mFpsPreference.setChecked(fpsStarted);
+
+            } else if (action.equals(mConfig.ACTION_CABC_SERVICE_CHANGED)) {
+                if (mInternalCabcStart) {
+                        mInternalCabcStart = false;
+                        return;
+                }
+
+                if (mCabcPreference == null) return;
+
+                final boolean cabcStarted = intent.getBooleanExtra(
+                            mConfig.EXTRA_CABC_STATE, false);
+
+                mDcDimmingPreference.setChecked(cabcStarted);
+            }
         }
     };
 
@@ -113,16 +128,22 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         mFpsPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
         if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setOnPreferenceChangeListener(this);
         else mFpsPreference.setSummary(R.string.fps_summary_not_supported);
+        mCABCPreference = (ListPreference) findPreference(mConfig.DISPLAYFEATURES_CABC_KEY);
+        if (FileUtils.fileExists(mConfig.getCabcPath())) mCABCPreference.setOnPreferenceChangeListener(this);
+        else mCABCPreference.removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
 
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         mFpsPreference.setChecked(isFpsOverlayRunning());
+        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled());
+        mCABCPreference.setSummary(mCABCPreference.getEntry());
 
         // Registering observers
         IntentFilter filter = new IntentFilter();
         filter.addAction(mConfig.ACTION_HBM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_FPS_SERVICE_CHANGED);
+        filter.addAction(mConfig.ACTION_CABC_SERVICE_CHANGED);
         getContext().registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
     }
 
@@ -132,6 +153,8 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         mFpsPreference.setChecked(isFpsOverlayRunning());
+        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
+        mCABCPreference.setSummary(mCABCPreference.getEntry());
     }
 
 
@@ -175,16 +198,34 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
             mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
         }
-	if (mConfig.DISPLAYFEATURES_FPS_KEY.equals(preference.getKey())) {
-	    mInternalFpsStart = true;
-	    Context mContext = getContext();
+        if (mConfig.DISPLAYFEATURES_FPS_KEY.equals(preference.getKey())) {
+            mInternalFpsStart = true;
+            Context mContext = getContext();
 
-	    boolean enabled = (Boolean) newValue;
-	    Intent fpsinfo = new Intent(mContext,
-		    com.android.displayfeatures.display.DisplayFeaturesFpsService.class);
-	    if (enabled) mContext.startService(fpsinfo);
-	    else mContext.stopService(fpsinfo);
-	}
+            boolean enabled = (Boolean) newValue;
+            Intent fpsinfo = new Intent(mContext,
+                    com.android.displayfeatures.display.DisplayFeaturesFpsService.class);
+            if (enabled) mContext.startService(fpsinfo);
+            else mContext.stopService(fpsinfo);
+        }
+        if (mConfig.DISPLAYFEATURES_CABC_KEY.equals(preference.getKey())) {
+            mInternalCabcStart = true;
+            Context mContext = getContext();
+
+	//            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+            FileUtils.writeLine(mConfig.getCabcPath(), (String) newValue);
+
+            boolean enabled = mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath());
+
+	//            sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_CABC_KEY, enabled).commit();
+
+            Intent intent = new Intent(mConfig.ACTION_CABC_SERVICE_CHANGED);
+
+            intent.putExtra(mConfig.EXTRA_CABC_STATE, enabled);
+            intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+            mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
+        }
         return true;
     }
 

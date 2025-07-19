@@ -17,20 +17,22 @@
     <!-- Display Features -->
     <string name="display_features_title">Display Features</string>
     <string name="display_features_summary">Contains toggles for HBM and DC Dimming</string>
+    <string name="display_features_info">Anti-Flicker Mode (AFM) reduces eye strain in low light conditions. (Note: reduces image quality and color production)\n\nHigh Brightness Mode (HBM) allows the display panel brightness to go above the maximums stock value. Which helps in improving visibility in direct sunlight.\n\nFPS Overlay shows overlay with current frames per second.\n\nContent Adaptive Brightness Control (CABC) adjusts display and backlight brightness based on currently shown content, to reduce power consumption without degradation.</string>
 
     <!-- DC Dimming settings -->
     <string name="dc_dimming_title">Anti-Flicker Mode</string>
-    <string name="dc_dimming_summary">Reduces eye strain in low light conditions (Note: reduces image quality and color production)</string>
     <string name="dc_dimming_summary_not_supported">DC Dimming is currently not supported by the kernel</string>
 
     <!-- HBM settings -->
     <string name="hbm_title">High Brightness Mode</string>
-    <string name="hbm_summary">Allows the display panel brightness to go above the maximum stock value. Which helps in improving visibility in direct sunlight</string>
     <string name="hbm_summary_not_supported">HBM is currently not supported by the kernel</string>
 
     <!-- FPS overlay settings -->
     <string name="fps_title">FPS Overlay</string>
-    <string name="fps_summary">Shows overlay with current frames per second</string>
     <string name="fps_summary_not_supported">FPS Overlay is currently not supported by the kernel</string>
+
+    <!-- CABC settings -->
+    <string name="cabc_title">Content Adaptive Brightness Control</string>
+    <string name="cabc_summary_not_supported">CABC is currently not supported by the kernel</string>
 
 </resources>

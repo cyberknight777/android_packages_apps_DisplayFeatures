@@ -21,19 +21,28 @@
     <SwitchPreferenceCompat
         android:key="dc_dimming"
         android:defaultValue="false"
-        android:title="@string/dc_dimming_title"
-        android:summary="@string/dc_dimming_summary" />
+        android:title="@string/dc_dimming_title" />
 
     <SwitchPreferenceCompat
         android:key="hbm"
         android:defaultValue="false"
-        android:title="@string/hbm_title"
-        android:summary="@string/hbm_summary" />
+        android:title="@string/hbm_title" />
 
     <SwitchPreferenceCompat
         android:key="fps"
         android:title="@string/fps_title"
-        android:summary="@string/fps_summary"
         android:persistent="true" />
+
+    <ListPreference
+        android:key="cabc"
+        android:title="@string/cabc_title"
+        android:entries="@array/cabc_modes"
+        android:entryValues="@array/cabc_values"
+        android:defaultValue="0" />
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="display_features_footer"
+        android:title="@string/display_features_info"
+        android:selectable="false" />
 
 </PreferenceScreen>

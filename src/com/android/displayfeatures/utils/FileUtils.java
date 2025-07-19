@@ -158,4 +158,17 @@ public final class FileUtils {
     }
     return defValue;
   }
+
+  /**
+   * Gets value of a node
+   *
+   * @return default value that is passed by function caller
+   */
+  public static String getNodeValue(String filename, boolean defValue) {
+    String fileValue = readOneLine(filename);
+    if (fileValue != null) {
+      return (fileValue);
+    }
+    return defValue;
+  }
 }
