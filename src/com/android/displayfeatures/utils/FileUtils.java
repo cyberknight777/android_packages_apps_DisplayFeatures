@@ -164,7 +164,7 @@ public final class FileUtils {
    *
    * @return default value that is passed by function caller
    */
-  public static String getNodeValue(String filename, boolean defValue) {
+  public static String getNodeValue(String filename, String defValue) {
     String fileValue = readOneLine(filename);
     if (fileValue != null) {
       return (fileValue);

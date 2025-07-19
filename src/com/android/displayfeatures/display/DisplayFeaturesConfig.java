@@ -88,7 +88,7 @@ public class DisplayFeaturesConfig {
         return FileUtils.getNodeValueAsBoolean(node, false);
     }
 
-    public boolean isCabcCurrentlyEnabled(String node) {
-        return FileUtils.getNodeValue(node, false);
+    public String isCabcCurrentlyEnabled(String node) {
+        return FileUtils.getNodeValue(node, "0");
     }
  }

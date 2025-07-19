@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.drawable.Icon;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -59,12 +60,12 @@ public class DisplayFeaturesCabcTileService extends TileService {
         }
     };
 
-    @override
     public void onCreate() {
         super.onCreate();
         mConfig = DisplayFeaturesConfig.getInstance(this);
-        CabcModes = mConfig.getStringArray(R.array.cabc_modes);
-        CabcValues = mConfig.getStringArray(R.array.cabc_values);
+        Resources res = mConfig.getResources();
+        CabcModes = res.getStringArray(R.array.cabc_modes);
+        CabcValues = res.getStringArray(R.array.cabc_values);
     }
 
     private void updateCurrentCabcmode() {
@@ -81,14 +82,15 @@ public class DisplayFeaturesCabcTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
-        mConfig = DisplayFeatures.getInstance(this);
+        mConfig = DisplayFeaturesConfig.getInstance(this);
+        Resources res = mConfig.getResources();
         tile = getQsTile();
 
-        if (!FileUtils.fileExists(mConfig.config_DisplayFeaturesCabcPath)) {
-	tile.setState(Tile.STATE_UNAVAILABLE);
-	tile.setSubtitle(mConfig.getString(R.string.cabc_summary_not_supported));
-	tile.updateTile();
-	return;
+        if (!FileUtils.fileExists(mConfig.getCabcPath())) {
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setSubtitle(res.getString(R.string.cabc_summary_not_supported));
+            tile.updateTile();
+            return;
         }
 
         updateCurrentCabcmode();
