@@ -29,7 +29,7 @@ import android.service.quicksettings.TileService;
 
 import androidx.preference.PreferenceManager;
 
-import java.utils.Arrays;
+import java.util.Arrays;
 
 import com.android.displayfeatures.R;
 import com.android.displayfeatures.utils.FileUtils;
@@ -54,7 +54,8 @@ public class DisplayFeaturesCabcTileService extends TileService {
                 mInternalStart = false;
                 return;
             }
-            updateUI();
+            updateCurrentCabcmode();
+            updateCabcTile();
         }
     };
 
@@ -80,10 +81,11 @@ public class DisplayFeaturesCabcTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+        mConfig = DisplayFeatures.getInstance(this);
         tile = getQsTile();
 
         if (!FileUtils.fileExists(mConfig.config_DisplayFeaturesCabcPath)) {
-	tile.setState(Tile.UNAVAILABLE);
+	tile.setState(Tile.STATE_UNAVAILABLE);
 	tile.setSubtitle(mConfig.getString(R.string.cabc_summary_not_supported));
 	tile.updateTile();
 	return;
@@ -127,7 +129,8 @@ public class DisplayFeaturesCabcTileService extends TileService {
         intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
         this.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
 
-        updateUI();
+        updateCabcTile();
+
     }
 
     private void tryStopService() {

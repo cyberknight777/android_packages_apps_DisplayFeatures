@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
 import androidx.preference.Preference;
+import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
@@ -95,7 +96,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
                         return;
                 }
 
-                if (mCabcPreference == null) return;
+                if (mCABCPreference == null) return;
 
                 final boolean cabcStarted = intent.getBooleanExtra(
                             mConfig.EXTRA_CABC_STATE, false);
@@ -135,7 +136,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         mFpsPreference.setChecked(isFpsOverlayRunning());
-        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled());
+        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
         mCABCPreference.setSummary(mCABCPreference.getEntry());
 
         // Registering observers
