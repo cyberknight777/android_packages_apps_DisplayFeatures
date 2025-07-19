@@ -14,16 +14,24 @@
 -->
 <resources>
 
-    <!-- Path to DC Dimming sysfs node -->
-    <java-symbol type="string" name="config_DisplayFeaturesDcDimPath" />
+    <!-- CABC modes
+            Example:
+            <string-array name="cabc_modes">
+                <item>"Off"</item>
+                <item>"Low (UI)"</item>
+                <item>"High (Video)"</item>
+            </string-array>
+    -->
+    <string-array name="cabc_modes"></string-array>
 
-    <!-- Path to HBM sysfs node -->
-    <java-symbol type="string" name="config_DisplayFeaturesHbmPath" />
-
-    <!-- Path to FPS Overlay sysfs node -->
-    <java-symbol type="string" name="config_DisplayFeaturesFpsPath" />
-
-    <!-- Path to CABC sysfs node -->
-    <java-symbol type="string" name="config_DisplayFeaturesCabcPath" />
+    <!-- CABC values
+            Example:
+            <string-array name="cabc_values" translatable="false">
+                <item>"0"</item>
+                <item>"1"</item>
+                <item>"2"</item>
+            </string-array>
+    -->
+    <string-array name="cabc_values" translatable="false"></string-array>
 
 </resources>

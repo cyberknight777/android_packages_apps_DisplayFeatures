@@ -37,10 +37,12 @@ public class DisplayFeaturesConfig {
     public static final String DISPLAYFEATURES_DC_DIMMING_KEY = "dc_dimming";
     public static final String DISPLAYFEATURES_HBM_KEY = "hbm";
     public static final String DISPLAYFEATURES_FPS_KEY = "fps";
+    public static final String DISPLAYFEATURES_CABC_KEY = "cabc";
 
     private final String config_DisplayFeaturesDcDimPath;
     private final String config_DisplayFeaturesHbmPath;
     private final String config_DisplayFeaturesFpsPath;
+    private final String config_DisplayFeaturesCabcPath;
 
     public static final String ACTION_HBM_SERVICE_CHANGED = "com.android.displayfeatures.display.HBM_SERVICE_CHANGED";
     public static final String EXTRA_HBM_STATE = "hbmenabled";
@@ -52,6 +54,9 @@ public class DisplayFeaturesConfig {
     public static final String EXTRA_FPS_STATE = "fpsenabled";
     public static final String PREF_KEY_FPS_STATE = "fps_running";
 
+    public static final String ACTION_CABC_SERVICE_CHANGED = "com.android.displayfeatures.display.CABC_SERVICE_CHANGED";
+    public static final String EXTRA_CABC_STATE = "cabcenabled";
+
     private DisplayFeaturesConfig(Context context) {
 
         Resources res = context.getResources();
@@ -59,6 +64,7 @@ public class DisplayFeaturesConfig {
         config_DisplayFeaturesDcDimPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesDcDimPath);
         config_DisplayFeaturesHbmPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesHbmPath);
         config_DisplayFeaturesFpsPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesFpsPath);
+        config_DisplayFeaturesCabcPath = res.getString(com.android.displayfeatures.R.string.config_DisplayFeaturesCabcPath);
 
     }
 
@@ -74,7 +80,15 @@ public class DisplayFeaturesConfig {
         return config_DisplayFeaturesFpsPath;
     }
 
+    public String getCabcPath() {
+        return config_DisplayFeaturesCabcPath;
+    }
+
     public boolean isCurrentlyEnabled(String node) {
         return FileUtils.getNodeValueAsBoolean(node, false);
+    }
+
+    public String isCabcCurrentlyEnabled(String node) {
+        return FileUtils.getNodeValue(node, "0");
     }
  }

@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -39,10 +40,12 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
     private SwitchPreferenceCompat mDcDimmingPreference;
     private SwitchPreferenceCompat mHBMPreference;
     private SwitchPreferenceCompat mFpsPreference;
+    private ListPreference mCABCPreference;
     private DisplayFeaturesConfig mConfig;
     private boolean mInternalHbmStart = false;
     private boolean mInternalDcDimStart = false;
     private boolean mInternalFpsStart = false;
+    private boolean mInternalCabcStart = false;
 
     private final BroadcastReceiver mServiceStateReceiver = new BroadcastReceiver() {
         @Override
@@ -86,6 +89,19 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
                             mConfig.EXTRA_FPS_STATE, false);
 
                 mFpsPreference.setChecked(fpsStarted);
+            } else if (action.equals(mConfig.ACTION_CABC_SERVICE_CHANGED)) {
+                if (mInternalCabcStart) {
+                        mInternalCabcStart = false;
+                        return;
+                }
+
+               if (mCABCPreference == null) return;
+
+               final boolean cabcStarted = intent.getBooleanExtra(
+                           mConfig.EXTRA_CABC_STATE, false);
+
+               mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
+               mCABCPreference.setSummary(mCABCPreference.getEntry());
 
             }
         }
@@ -114,16 +130,22 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         mFpsPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
         if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setOnPreferenceChangeListener(this);
         else mFpsPreference.setSummary(R.string.fps_summary_not_supported);
+        mCABCPreference = (ListPreference) findPreference(mConfig.DISPLAYFEATURES_CABC_KEY);
+        if (FileUtils.fileExists(mConfig.getCabcPath())) mCABCPreference.setOnPreferenceChangeListener(this);
+        else getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
 
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         mFpsPreference.setChecked(isFpsOverlayRunning());
+        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
+        mCABCPreference.setSummary(mCABCPreference.getEntry());
 
         // Registering observers
         IntentFilter filter = new IntentFilter();
         filter.addAction(mConfig.ACTION_HBM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_DC_DIM_SERVICE_CHANGED);
         filter.addAction(mConfig.ACTION_FPS_SERVICE_CHANGED);
+        filter.addAction(mConfig.ACTION_CABC_SERVICE_CHANGED);
         getContext().registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
     }
 
@@ -133,6 +155,8 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         mFpsPreference.setChecked(isFpsOverlayRunning());
+        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
+        mCABCPreference.setSummary(mCABCPreference.getEntry());
     }
 
 
@@ -187,6 +211,25 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
             if (enabled) mContext.startService(fpsinfo);
             else mContext.stopService(fpsinfo);
+        }
+        if (mConfig.DISPLAYFEATURES_CABC_KEY.equals(preference.getKey())) {
+            mInternalCabcStart = true;
+            Context mContext = getContext();
+
+            mCABCPreference.setValue((String) newValue);
+            mCABCPreference.setSummary(mCABCPreference.getEntry());
+
+            FileUtils.writeLine(mConfig.getCabcPath(), (String) newValue);
+
+            String value = mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath());
+
+            Boolean enabled = (!value.equals("0"));
+
+            Intent intent = new Intent(mConfig.ACTION_CABC_SERVICE_CHANGED);
+
+            intent.putExtra(mConfig.EXTRA_CABC_STATE, enabled);
+            intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+            mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
         }
         return true;
     }

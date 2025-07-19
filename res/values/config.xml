@@ -22,4 +22,8 @@
 
     <!-- Path to FPS Overlay sysfs node -->
     <string name="config_DisplayFeaturesFpsPath" translatable="false"></string>
+
+    <!-- Path to CABC sysfs node -->
+    <string name="config_DisplayFeaturesCabcPath" translatable="false"></string>
+
 </resources>
