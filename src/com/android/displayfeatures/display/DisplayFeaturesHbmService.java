@@ -1,6 +1,6 @@
 /*
 * Copyright (C) 2020 Yet Another AOSP Project
-*               2023 cyberknight777
+*               2023-2025 cyberknight777
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
