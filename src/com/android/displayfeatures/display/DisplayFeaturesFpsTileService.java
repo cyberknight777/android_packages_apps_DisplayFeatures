@@ -73,7 +73,7 @@ public class DisplayFeaturesFpsTileService extends TileService {
     @Override
     public void onStopListening() {
         super.onStopListening();
-        unregisterReceiver(mServiceStateReceiver);
+        if (!mInternalStart) unregisterReceiver(mServiceStateReceiver);
     }
 
     @Override
