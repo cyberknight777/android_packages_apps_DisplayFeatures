@@ -115,20 +115,22 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mDcDimmingPreference.setEnabled(true);
             mDcDimmingPreference.setOnPreferenceChangeListener(this);
         } else {
-            mDcDimmingPreference.setSummary(R.string.dc_dimming_summary_not_supported);
-            mDcDimmingPreference.setEnabled(false);
+//            mDcDimmingPreference.setSummary(R.string.dc_dimming_summary_not_supported);
+            getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY));
+//            mDcDimmingPreference.setEnabled(false);
         }
         mHBMPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_HBM_KEY);
         if (FileUtils.fileExists(mConfig.getHbmPath())) {
             mHBMPreference.setEnabled(true);
             mHBMPreference.setOnPreferenceChangeListener(this);
         } else {
-            mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
-            mHBMPreference.setEnabled(false);
+//            mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
+            getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_HBM_KEY));
+//            mHBMPreference.setEnabled(false);
         }
         mFpsPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
         if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setOnPreferenceChangeListener(this);
-        else mFpsPreference.setSummary(R.string.fps_summary_not_supported);
+        else getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_FPS_KEY));
         mCABCPreference = (ListPreference) findPreference(mConfig.DISPLAYFEATURES_CABC_KEY);
         if (FileUtils.fileExists(mConfig.getCabcPath())) mCABCPreference.setOnPreferenceChangeListener(this);
         else getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
