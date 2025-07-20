@@ -52,6 +52,15 @@ public class DisplayFeaturesFpsTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         mIsShowing = isRunning();
+        final Tile tile = getQsTile();
+
+
+        if (!FileUtils.fileExists(mConfig.getFpsPath())) {
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setSubtitle(getResources().getString(R.string.fps_summary_not_supported));
+            tile.updateTile();
+            return;
+        }
         updateTile();
         IntentFilter filter = new IntentFilter(mConfig.ACTION_FPS_SERVICE_CHANGED);
         registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_EXPORTED);
