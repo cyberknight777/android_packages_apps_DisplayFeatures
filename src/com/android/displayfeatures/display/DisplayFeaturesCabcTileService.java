@@ -117,13 +117,13 @@ public class DisplayFeaturesCabcTileService extends TileService {
 	currentCabcMode++;
         }
 
-        //        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String value = mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath());
         FileUtils.writeLine(mConfig.getCabcPath(), CabcValues[currentCabcMode]);
         Boolean enabled = (!value.equals("0"));
 
-        //        sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_CABC_KEY, enabled).commit();
+        sharedPrefs.edit().putString(mConfig.DISPLAYFEATURES_CABC_KEY, CabcValues[currentCabcMode]).apply();
 
         Intent cabcIntent = new Intent(this,
                 com.android.displayfeatures.display.DisplayFeaturesCabcService.class);
