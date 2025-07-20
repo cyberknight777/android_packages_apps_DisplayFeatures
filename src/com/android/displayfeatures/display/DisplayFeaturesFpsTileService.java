@@ -26,6 +26,9 @@ import android.service.quicksettings.TileService;
 
 import androidx.preference.PreferenceManager;
 
+import com.android.displayfeatures.R;
+import com.android.displayfeatures.utils.FileUtils;
+
 // TODO: Add FPS drawables
 public class DisplayFeaturesFpsTileService extends TileService {
 
@@ -51,7 +54,17 @@ public class DisplayFeaturesFpsTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+        mConfig = DisplayFeaturesConfig.getInstance(this);
         mIsShowing = isRunning();
+        final Tile tile = getQsTile();
+
+
+        if (!FileUtils.fileExists(mConfig.getFpsPath())) {
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setSubtitle(getResources().getString(R.string.fps_summary_not_supported));
+            tile.updateTile();
+            return;
+        }
         updateTile();
         IntentFilter filter = new IntentFilter(mConfig.ACTION_FPS_SERVICE_CHANGED);
         registerReceiver(mServiceStateReceiver, filter, Context.RECEIVER_EXPORTED);

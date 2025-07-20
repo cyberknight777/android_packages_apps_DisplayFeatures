@@ -66,6 +66,15 @@ public class DisplayFeaturesDcDimTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         mConfig = DisplayFeaturesConfig.getInstance(this);
+        final Tile tile = getQsTile();
+
+
+        if (!FileUtils.fileExists(mConfig.getDcDimPath())) {
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setSubtitle(getResources().getString(R.string.dc_dimming_summary_not_supported));
+            tile.updateTile();
+            return;
+        }
 
         updateUI();
 
