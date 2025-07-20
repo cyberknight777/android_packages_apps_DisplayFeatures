@@ -85,10 +85,10 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
                 if (mFpsPreference == null) return;
 
-                        final boolean fpsStarted = intent.getBooleanExtra(
-                                    mConfig.EXTRA_FPS_STATE, false);
+                final boolean fpsStarted = intent.getBooleanExtra(
+                            mConfig.EXTRA_FPS_STATE, false);
 
-                        mFpsPreference.setChecked(fpsStarted);
+                mFpsPreference.setChecked(fpsStarted);
 
             } else if (action.equals(mConfig.ACTION_CABC_SERVICE_CHANGED)) {
                 if (mInternalCabcStart) {
