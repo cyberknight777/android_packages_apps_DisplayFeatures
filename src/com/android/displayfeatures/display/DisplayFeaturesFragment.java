@@ -114,6 +114,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         if (FileUtils.fileExists(mConfig.getDcDimPath())) {
             mDcDimmingPreference.setEnabled(true);
             mDcDimmingPreference.setOnPreferenceChangeListener(this);
+            mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         } else {
 //            mDcDimmingPreference.setSummary(R.string.dc_dimming_summary_not_supported);
             getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY));
@@ -123,23 +124,27 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
         if (FileUtils.fileExists(mConfig.getHbmPath())) {
             mHBMPreference.setEnabled(true);
             mHBMPreference.setOnPreferenceChangeListener(this);
+            mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         } else {
 //            mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
             getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_HBM_KEY));
 //            mHBMPreference.setEnabled(false);
         }
         mFpsPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
-        if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setOnPreferenceChangeListener(this);
-        else getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_FPS_KEY));
+        if (FileUtils.fileExists(mConfig.getFpsPath())) {
+            mFpsPreference.setOnPreferenceChangeListener(this);
+            mFpsPreference.setChecked(isFpsOverlayRunning());
+        } else {
+            getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_FPS_KEY));
+        }
         mCABCPreference = (ListPreference) findPreference(mConfig.DISPLAYFEATURES_CABC_KEY);
-        if (FileUtils.fileExists(mConfig.getCabcPath())) mCABCPreference.setOnPreferenceChangeListener(this);
-        else getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
-
-        mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
-        mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
-        mFpsPreference.setChecked(isFpsOverlayRunning());
-        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
-        mCABCPreference.setSummary(mCABCPreference.getEntry());
+        if (FileUtils.fileExists(mConfig.getCabcPath())) {
+            mCABCPreference.setOnPreferenceChangeListener(this);
+            mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
+            mCABCPreference.setSummary(mCABCPreference.getEntry());
+        } else {
+            getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_CABC_KEY));
+        }
 
         // Registering observers
         IntentFilter filter = new IntentFilter();
@@ -153,11 +158,13 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
     @Override
     public void onResume() {
         super.onResume();
-        mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
-        mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
-        mFpsPreference.setChecked(isFpsOverlayRunning());
-        mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
-        mCABCPreference.setSummary(mCABCPreference.getEntry());
+        if (FileUtils.fileExists(mConfig.getDcDimPath())) mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
+        if (FileUtils.fileExists(mConfig.getHbmPath())) mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
+        if (FileUtils.fileExists(mConfig.getFpsPath())) mFpsPreference.setChecked(isFpsOverlayRunning());
+        if (FileUtils.fileExists(mConfig.getCabcPath())) {
+            mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
+            mCABCPreference.setSummary(mCABCPreference.getEntry());
+        }
     }
 
 
