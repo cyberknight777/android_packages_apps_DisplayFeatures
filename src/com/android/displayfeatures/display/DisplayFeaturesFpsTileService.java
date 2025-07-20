@@ -26,6 +26,9 @@ import android.service.quicksettings.TileService;
 
 import androidx.preference.PreferenceManager;
 
+import com.android.displayfeatures.R;
+import com.android.displayfeatures.utils.FileUtils;
+
 // TODO: Add FPS drawables
 public class DisplayFeaturesFpsTileService extends TileService {
 
