@@ -64,6 +64,15 @@ public class DisplayFeaturesHbmTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         mConfig = DisplayFeaturesConfig.getInstance(this);
+        final Tile tile = getQsTile();
+
+
+        if (!FileUtils.fileExists(mConfig.getHbmPath())) {
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setSubtitle(getResources().getString(R.string.hbm_summary_not_supported));
+            tile.updateTile();
+            return;
+        }
 
         updateUI();
 
