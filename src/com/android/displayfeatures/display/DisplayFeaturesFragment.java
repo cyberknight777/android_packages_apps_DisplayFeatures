@@ -118,9 +118,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mDcDimmingPreference.setOnPreferenceChangeListener(this);
             mDcDimmingPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getDcDimPath()));
         } else {
-//            mDcDimmingPreference.setSummary(R.string.dc_dimming_summary_not_supported);
             getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY));
-//            mDcDimmingPreference.setEnabled(false);
         }
         mHBMPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_HBM_KEY);
         if (FileUtils.fileExists(mConfig.getHbmPath())) {
@@ -128,9 +126,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mHBMPreference.setOnPreferenceChangeListener(this);
             mHBMPreference.setChecked(mConfig.isCurrentlyEnabled(mConfig.getHbmPath()));
         } else {
-//            mHBMPreference.setSummary(R.string.hbm_summary_not_supported);
             getPreferenceScreen().removePreference(findPreference(mConfig.DISPLAYFEATURES_HBM_KEY));
-//            mHBMPreference.setEnabled(false);
         }
         mFpsPreference = (SwitchPreferenceCompat) findPreference(mConfig.DISPLAYFEATURES_FPS_KEY);
         if (FileUtils.fileExists(mConfig.getFpsPath())) {
