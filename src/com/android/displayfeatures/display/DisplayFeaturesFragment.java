@@ -223,15 +223,11 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mCABCPreference.setValue((String) newValue);
             mCABCPreference.setSummary(mCABCPreference.getEntry());
 
-	//            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-
             FileUtils.writeLine(mConfig.getCabcPath(), (String) newValue);
 
             String value = mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath());
 
             Boolean enabled = (!value.equals("0"));
-
-	//            sharedPrefs.edit().putBoolean(mConfig.DISPLAYFEATURES_CABC_KEY, enabled).commit();
 
             Intent cabcIntent = new Intent(mContext,
                     com.android.displayfeatures.display.DisplayFeaturesCabcService.class);
