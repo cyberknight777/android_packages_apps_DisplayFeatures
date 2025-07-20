@@ -101,7 +101,7 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
                 final boolean cabcStarted = intent.getBooleanExtra(
                             mConfig.EXTRA_CABC_STATE, false);
 
-                mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath())));
+                mCABCPreference.setValue(mConfig.isCabcCurrentlyEnabled(mConfig.getCabcPath()));
                 mCABCPreference.setSummary(mCABCPreference.getEntry());
 
             }
