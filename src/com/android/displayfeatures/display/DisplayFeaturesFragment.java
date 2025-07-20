@@ -215,6 +215,9 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             mInternalCabcStart = true;
             Context mContext = getContext();
 
+            mCABCPreference.setValue((String) newValue);
+            mCABCPreference.setSummary(mCABCPreference.getEntry());
+
 	//            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
             FileUtils.writeLine(mConfig.getCabcPath(), (String) newValue);
