@@ -54,6 +54,7 @@ public class DisplayFeaturesFpsTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+        mConfig = DisplayFeaturesConfig.getInstance(this);
         mIsShowing = isRunning();
         final Tile tile = getQsTile();
 
