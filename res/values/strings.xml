@@ -16,7 +16,7 @@
 
     <!-- Display Features -->
     <string name="display_features_title">Display Features</string>
-    <string name="display_features_summary">Contains toggles for HBM and DC Dimming</string>
+    <string name="display_features_summary">Control advanced display panel features</string>
     <string name="display_features_info">Anti-Flicker Mode (AFM) reduces eye strain in low light conditions. (Note: reduces image quality and color production)\n\nHigh Brightness Mode (HBM) allows the display panel brightness to go above the maximums stock value. Which helps in improving visibility in direct sunlight.\n\nFPS Overlay shows overlay with current frames per second.\n\nContent Adaptive Brightness Control (CABC) adjusts display and backlight brightness based on currently shown content, to reduce power consumption without degradation.</string>
 
     <!-- DC Dimming settings -->
