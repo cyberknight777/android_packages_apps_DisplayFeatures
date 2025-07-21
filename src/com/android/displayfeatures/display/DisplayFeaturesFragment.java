@@ -74,19 +74,20 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
 
                 mDcDimmingPreference.setChecked(dcDimStarted);
 
-	    } else if (action.equals(mConfig.ACTION_FPS_SERVICE_CHANGED)) {
-		if (mInternalFpsStart) {
-		    mInternalFpsStart = false;
-		    return;
-		}
+            } else if (action.equals(mConfig.ACTION_FPS_SERVICE_CHANGED)) {
+                if (mInternalFpsStart) {
+                        mInternalFpsStart = false;
+                        return;
+                }
 
-		if (mFpsPreference == null) return;
+                if (mFpsPreference == null) return;
 
-		final boolean fpsStarted = intent.getBooleanExtra(
+                final boolean fpsStarted = intent.getBooleanExtra(
                             mConfig.EXTRA_FPS_STATE, false);
 
-		mFpsPreference.setChecked(fpsStarted);
-	    }
+                mFpsPreference.setChecked(fpsStarted);
+
+            }
         }
     };
 
@@ -175,16 +176,18 @@ public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
             intent.setFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
             mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);;
         }
-	if (mConfig.DISPLAYFEATURES_FPS_KEY.equals(preference.getKey())) {
-	    mInternalFpsStart = true;
-	    Context mContext = getContext();
+        if (mConfig.DISPLAYFEATURES_FPS_KEY.equals(preference.getKey())) {
+            mInternalFpsStart = true;
+            Context mContext = getContext();
 
-	    boolean enabled = (Boolean) newValue;
-	    Intent fpsinfo = new Intent(mContext,
-		    com.android.displayfeatures.display.DisplayFeaturesFpsService.class);
-	    if (enabled) mContext.startService(fpsinfo);
-	    else mContext.stopService(fpsinfo);
-	}
+            boolean enabled = (Boolean) newValue;
+
+            Intent fpsinfo = new Intent(mContext,
+                    com.android.displayfeatures.display.DisplayFeaturesFpsService.class);
+
+            if (enabled) mContext.startService(fpsinfo);
+            else mContext.stopService(fpsinfo);
+        }
         return true;
     }
 
