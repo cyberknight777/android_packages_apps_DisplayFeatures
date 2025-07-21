@@ -40,13 +40,18 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        boolean dcDimmingEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false);
-        boolean hbmEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false);
-        FileUtils.writeLine(mConfig.getDcDimPath(), dcDimmingEnabled ? "1" : "0");
-        FileUtils.writeLine(mConfig.getHbmPath(), hbmEnabled ? "1" : "0");
+        if (FileUtils.fileExists(mConfig.getDcDimPath())) {
+            boolean dcDimmingEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_DC_DIMMING_KEY, false);
+            FileUtils.writeLine(mConfig.getDcDimPath(), dcDimmingEnabled ? "1" : "0");
+        }
+
+        if (FileUtils.fileExists(mConfig.getHbmPath())) {
+            boolean hbmEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false);
+            FileUtils.writeLine(mConfig.getHbmPath(), hbmEnabled ? "1" : "0");
+        }
 
         // reset prefs that reflect a state that does not retain a reboot
-        sharedPrefs.edit().remove(mConfig.PREF_KEY_FPS_STATE).commit();
+        if (FileUtils.fileExists(mConfig.getFpsPath())) sharedPrefs.edit().remove(mConfig.PREF_KEY_FPS_STATE).commit();
 
     }
 }
