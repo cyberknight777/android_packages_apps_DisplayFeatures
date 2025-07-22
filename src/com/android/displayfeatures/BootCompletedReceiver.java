@@ -66,13 +66,8 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         pm.setComponentEnabledSetting(cn, state, 0);
 
         cn = new ComponentName(PKG_NAME, HBM_TILE_CLASS_NAME);
-        if (FileUtils.fileExists(mConfig.getHbmPath())) {
-            boolean hbmEnabled = sharedPrefs.getBoolean(mConfig.DISPLAYFEATURES_HBM_KEY, false);
-            FileUtils.writeLine(mConfig.getHbmPath(), hbmEnabled ? "1" : "0");
-            state = COMPONENT_ENABLED_STATE_ENABLED;
-        } else {
-            state = COMPONENT_ENABLED_STATE_DISABLED;
-        }
+        state = FileUtils.fileExists(mConfig.getHbmPath())
+                ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
         pm.setComponentEnabledSetting(cn, state, 0);
 
         cn = new ComponentName(PKG_NAME, FPS_TILE_CLASS_NAME);
