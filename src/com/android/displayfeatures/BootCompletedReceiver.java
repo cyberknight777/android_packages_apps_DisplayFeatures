@@ -86,8 +86,13 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         pm.setComponentEnabledSetting(cn, state, 0);
 
         cn = new ComponentName(PKG_NAME, CABC_TILE_CLASS_NAME);
-        state = FileUtils.fileExists(mConfig.getCabcPath())
-                ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
+        if (FileUtils.fileExists(mConfig.getCabcPath())) {
+            String cabcEnabled = sharedPrefs.getString(mConfig.DISPLAYFEATURES_CABC_KEY, "0");
+            FileUtils.writeLine(mConfig.getCabcPath(), cabcEnabled);
+            state = COMPONENT_ENABLED_STATE_ENABLED;
+        } else {
+            state = COMPONENT_ENABLED_STATE_DISABLED;
+        }
         pm.setComponentEnabledSetting(cn, state, 0);
 
     }
