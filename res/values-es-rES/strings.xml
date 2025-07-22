@@ -16,21 +16,23 @@
 
     <!-- Display Features -->
     <string name="display_features_title">Funciones de la Pantalla</string>
-    <string name="display_features_summary">Contiene interruptores para el Modo de Brillo Alto y Modo Anti-Parpadeo</string>
+    <string name="display_features_summary">Controla las funciones avanzadas del panel de visualización</string>
+    <string name="display_features_info">El modo anti parpadeo (AFM) reduce la fatiga visual en condiciones de poca luz. (Nota: reduce la calidad de imagen y la producción de color)\n\nEl modo de alto brillo (HBM) permite que el brillo del panel de la pantalla supere el valor máximo de fábrica. Esto ayuda a mejorar la visibilidad con luz solar directa.\n\nSuperposición de FPS muestra una superposición con los fotogramas por segundo actuales.\n\nEl control de brillo adaptable al contenido (CABC) ajusta el brillo de la pantalla y la retroiluminación en función del contenido que se muestra en ese momento, para reducir el consumo de energía sin degradación.</string>
 
     <!-- DC Dimming settings -->
-    <string name="dc_dimming_title">Modo Anti-Parpadeo</string>
-    <string name="dc_dimming_summary">Reduce la fatiga visual en condiciones de poca luz (Nota: reduce la calidad de la imagen y la producción de color)</string>
-    <string name="dc_dimming_summary_not_supported">El modo anti-parpadeo no esta actualmente soportado por el kernel</string>
+    <string name="dc_dimming_title">Modo Anti Parpadeo</string>
+    <string name="dc_dimming_summary_not_supported">El kernel no admite actualmente el modo anti parpadeo</string>
 
     <!-- HBM settings -->
-    <string name="hbm_title">Modo De Brillo Alto</string>
-    <string name="hbm_summary">Permite que el brillo del panel de visualización supere el valor máximo de stock. Lo que ayuda a mejorar la visibilidad con luz solar directa.</string>
-    <string name="hbm_summary_not_supported">El modo de brillo alto no esta actualmente soportado por el kernel</string>
+    <string name="hbm_title">Modo de Brillo Alto</string>
+    <string name="hbm_summary_not_supported">El kernel no admite actualmente el modo de alto brillo</string>
 
     <!-- FPS overlay settings -->
     <string name="fps_title">Superposición de FPS</string>
-    <string name="fps_summary">Muestra una superposición con los fotogramas por segundo actuales</string>
     <string name="fps_summary_not_supported">El kernel no admite actualmente la superposición de FPS</string>
+
+    <!-- CABC settings -->
+    <string name="cabc_title">Control de Brillo Adaptable al Contenido</string>
+    <string name="cabc_summary_not_supported">El kernel no admite actualmente el control de brillo adaptable al contenido</string>
 
 </resources>
