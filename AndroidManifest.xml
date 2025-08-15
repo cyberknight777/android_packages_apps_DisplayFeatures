@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <protected-broadcast android:name="com.android.displayfeatures.display.HBM_SERVICE_CHANGED" />
+    <protected-broadcast android:name="com.android.displayfeatures.display.FPS_SERVICE_CHANGED" />
 
     <application
         android:label="@string/display_features_title"
