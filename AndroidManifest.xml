@@ -30,7 +30,7 @@
     <application
         android:label="@string/display_features_title"
         android:persistent="true"
-        android:theme="@style/Theme.SubSettingsBase">
+        android:theme="@style/Theme.SubSettingsBase.Expressive">
 
         <receiver
             android:name=".BootCompletedReceiver"
@@ -45,8 +45,7 @@
         <activity
             android:name=".display.DisplayFeaturesActivity"
             android:exported="true"
-            android:label="@string/display_features_title"
-            android:theme="@style/Theme.SubSettingsBase">
+            android:label="@string/display_features_title">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>
