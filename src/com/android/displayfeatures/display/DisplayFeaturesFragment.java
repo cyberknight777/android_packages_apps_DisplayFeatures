@@ -27,14 +27,14 @@ import android.os.Handler;
 import android.os.UserHandle;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.displayfeatures.R;
 import com.android.displayfeatures.utils.FileUtils;
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
-public class DisplayFeaturesFragment extends PreferenceFragmentCompat implements
+public class DisplayFeaturesFragment extends SettingsBasePreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     private SwitchPreferenceCompat mDcDimmingPreference;
